@@ -33,6 +33,7 @@ streamlit.dataframe(fruityvice_normalized)
 # The user is asked to enter a fruit choicer .
 fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
 # Display on the screen the fruit choice
+
 streamlit.write('The user entered ', fruit_choice)
 # Display on the screen the fruit choice
 import snowflake.connector
