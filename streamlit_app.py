@@ -4,9 +4,6 @@ import requests
 import snowflake.connector
 from urllib.error import URLError
 
-
-
-
 streamlit.title('My Parents New Healthy Diner')
 streamlit.header('Breakfast Favourites')
 streamlit.text('🥣''Omega 3 and Blueberry Oatmeal')
@@ -25,28 +22,19 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
 # New section to display fruityvice API response
-
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-streamlit.text(fruityvice_response)
-
 streamlit.header("Fruityvice Fruit Advice!")
-
-# seperate the the base URL from the fruit name.
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + "kiwi")
-# Remove the line for the raw json data.
-# Take the json verson of the response and normalize it 
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-# Output it on the screen as a table
-streamlit.dataframe(fruityvice_normalized)
-# The user is asked to enter a fruit choicer .
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-# Display on the screen the fruit choice
-
-
-streamlit.write('The user entered ', fruit_choice)
-# Display on the screen the fruit choice
-
-# Don't run anything past here while we troubleshoot
+try:
+   fruit_choice = streamlit.text_input('What fruit would you like information about?')
+   if not fruit_choice:
+        streamlit.error("Please select a fruit to get information.")
+   else:
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+        fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+        streamlit.dataframe(fruityvice_normalized)
+except URLError as e:
+   streamlit.error()
+    
+ # Don't run anything past here while we troubleshoot
 streamlit.stop()
 
 
